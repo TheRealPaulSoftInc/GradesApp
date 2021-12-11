@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 from django.urls.conf import re_path
@@ -26,12 +27,18 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/accounts/', include('accounts.urls')),
     path('api/grades/', include('grades.urls')),
-    path('admin/', admin.site.urls),
-    path('swagger/', schema_view.with_ui('swagger',
-         cache_timeout=0), name='schema-swagger-ui'),
-    path('docs/', include_docs_urls(title='GradesApp API',
-         description='API for GradesApp', permission_classes=[permissions.AllowAny, ],
-                                    authentication_classes=[])),
-    path('swagger.json/',
-         schema_view.without_ui(cache_timeout=0), name='schema-json'),
 ]
+
+
+# if settings.DEBUG:  # this should be set, but we want to expose the docs for everyone
+if True:
+    urlpatterns += [
+        path('admin/', admin.site.urls),
+        path('swagger/', schema_view.with_ui('swagger',
+                                             cache_timeout=0), name='schema-swagger-ui'),
+        path('docs/', include_docs_urls(title='GradesApp API',
+                                        description='API for GradesApp', permission_classes=[permissions.AllowAny, ],
+                                        authentication_classes=[])),
+        path('swagger.json/',
+             schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    ]
