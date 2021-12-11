@@ -118,10 +118,10 @@ DATABASES = {
 }
 
 
-if not DEBUG:
-    DATABASES['default'] = DATABASES['cloud']
-elif 'test' in sys.argv:
+if 'test' in sys.argv:
     DATABASES['default'] = DATABASES['test']
+elif not DEBUG:
+    DATABASES['default'] = DATABASES['cloud']
 else:
     DATABASES['default'] = DATABASES['local']
 
