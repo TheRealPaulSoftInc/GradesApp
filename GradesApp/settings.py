@@ -99,7 +99,7 @@ DATABASES = {
         'USER': os.environ.get('DB_CLOUD_USER'),
         'PASSWORD': os.environ.get('DB_CLOUD_PASSWORD'),
         'HOST': os.environ.get('DB_CLOUD_HOST'),
-        'PORT': '1433',
+        'PORT': os.environ.get('DB_CLOUD_PORT'),
         "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", },
     },
     'test': {
@@ -112,7 +112,7 @@ DATABASES = {
         'USER': os.environ.get('DB_LOCAL_USER'),
         'PASSWORD': os.environ.get('DB_LOCAL_PASSWORD'),
         'HOST': os.environ.get('DB_LOCAL_HOST'),
-        'PORT': '1433',
+        'PORT': os.environ.get('DB_LOCAL_PORT'),
         "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", }
     },
 }
