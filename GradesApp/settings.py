@@ -112,7 +112,7 @@ DATABASES = {
         'USER': os.environ.get('DB_LOCAL_USER'),
         'PASSWORD': os.environ.get('DB_LOCAL_PASSWORD'),
         'HOST': os.environ.get('DB_LOCAL_HOST'),
-        'PORT': '',
+        'PORT': '1433',
         "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", }
     },
 }
