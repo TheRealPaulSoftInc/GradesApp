@@ -63,11 +63,14 @@ class LoginView(GenericAPIView):
         email = request.data.get('email', None)
         password = request.data.get('password', None)
 
-        user = authenticate(username=email, password=password)
+        user = authenticate(
+            username=email, password=password)
 
-        if user:
+        if user and user.is_active:
             serializer = self.serializer_class(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
+        elif user and not user.is_active:
+            return Response({'message': "Inactive account. Activate your account via email"}, status=status.HTTP_403_FORBIDDEN)
         return Response({'message': "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
