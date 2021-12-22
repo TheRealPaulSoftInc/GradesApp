@@ -1,4 +1,5 @@
 from asgiref.sync import sync_to_async
+from django.conf import settings
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from django.http import Http404
@@ -23,9 +24,7 @@ class RegisterView(GenericAPIView):
 
     def _send_activation_mail(self, request, user):
         token = jwt_account_activation.generate_token(user)
-        # TODO: this url must be pointing to the Frontend Domain
-        activation_link = "http://" + \
-            request.META['HTTP_HOST'] + "/api/accounts/activate/" + token
+        activation_link = settings.EMAIL_VERIFICATION_URL + token
         target_email = user.email
         send_mail(
             subject='Account activation',

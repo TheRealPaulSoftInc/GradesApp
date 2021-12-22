@@ -18,9 +18,9 @@ CORS_ALLOWED_ORIGINS=http://localhost http://127.0.0.1
 
 # You must set a email and enable "Less secure app access" on that account
 # if its an gmail account: https://support.google.com/accounts/answer/6010255#zippy=
-
 PAULSOFT_EMAIL_USER=email@email.com
 PAULSOFT_EMAIL_PASSWORD=password
+EMAIL_VERIFICATION_URL=http://localhost:3000/activate/
 
 # Set the configuration of your local mssql DB
 DB_LOCAL_NAME=gradesappdb

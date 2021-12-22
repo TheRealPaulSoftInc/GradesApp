@@ -179,7 +179,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('PAULSOFT_EMAIL_USER')
 DEFAULT_FROM_EMAIL = os.environ.get('PAULSOFT_EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('PAULSOFT_EMAIL_PASSWORD')
-
+EMAIL_VERIFICATION_URL = os.environ.get('EMAIL_VERIFICATION_URL')
 
 # Django Rest Framework settings
 # https://www.django-rest-framework.org/api-guide/settings/
