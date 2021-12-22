@@ -1,6 +1,7 @@
 import django.contrib.auth.password_validation as validators
 from django.core import exceptions
-from rest_framework.serializers import ModelSerializer, ValidationError
+from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer, Serializer, ValidationError
 
 from accounts.models import User
 
@@ -59,3 +60,7 @@ class LoginSerializer(ModelSerializer):
             'password': {'write_only': True},
             'token': {'read_only': True},
         }
+
+
+class ResendActivationTokenSerializer(Serializer):
+    email = serializers.EmailField(max_length=254)

@@ -12,4 +12,6 @@ urlpatterns = [
     path('user/', views.UserListView.as_view(), name='users'),
     path('user/<int:id>/', views.UserDetailView.as_view(), name='user-detail'),
     path('activate/<token>/', views.ActivationView.as_view(), name='activate'),
+    path('resend/', views.ResendActivationTokenView.as_view(),
+         name='resend-activation'),
 ]

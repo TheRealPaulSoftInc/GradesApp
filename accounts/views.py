@@ -4,35 +4,26 @@ from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from django.http import Http404
 from django_filters.rest_framework.backends import DjangoFilterBackend
-from rest_framework import filters, status
+from rest_framework import exceptions, filters, status
 from rest_framework.decorators import permission_classes
-from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import (GenericAPIView, ListAPIView,
+                                     RetrieveUpdateDestroyAPIView)
 from rest_framework.parsers import JSONParser
-from rest_framework.permissions import DjangoModelPermissions, IsAdminUser, IsAuthenticated
+from rest_framework.permissions import (DjangoModelPermissions, IsAdminUser,
+                                        IsAuthenticated)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.jwt import jwt_account_activation
 from accounts.models import User
-from accounts.serializers import LoginSerializer, UserSerializer
+from accounts.serializers import LoginSerializer, ResendActivationTokenSerializer, UserSerializer
+from accounts.utils import send_activation_mail
 
 
 class RegisterView(GenericAPIView):
 
     authentication_classes = []
     serializer_class = UserSerializer
-
-    def _send_activation_mail(self, request, user):
-        token = jwt_account_activation.generate_token(user)
-        activation_link = settings.EMAIL_VERIFICATION_URL + token
-        target_email = user.email
-        send_mail(
-            subject='Account activation',
-            message=f'Activate your account here: {activation_link}',
-            from_email=None,
-            recipient_list=[target_email],
-            fail_silently=False,
-        )
 
     def post(self, request):
         """
@@ -43,7 +34,7 @@ class RegisterView(GenericAPIView):
             user = serializer.save()
             # TODO: Implemented asyncronous call
             try:
-                self._send_activation_mail(request, user)
+                send_activation_mail(user)
             except Exception:
                 pass
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -95,8 +86,32 @@ class ActivationView(APIView):
         if user:
             user.is_active = True
             user.save()
-            return Response({'message': "User account succesfully activated"}, status=status.HTTP_201_CREATED)
+            return Response({'message': "User account successfully activated"}, status=status.HTTP_201_CREATED)
         return Response({'message': "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ResendActivationTokenView(GenericAPIView):
+
+    authentication_classes = []
+    serializer_class = ResendActivationTokenSerializer
+
+    def put(self, request):
+        """
+        Refresh the activation token and resends it to the user via email
+        """
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist as no_user:
+                raise exceptions.ParseError(
+                    'No such user')
+            if user.is_active:
+                return Response({'message': "User account already activated"}, status=status.HTTP_401_UNAUTHORIZED)
+            send_activation_mail(user)
+            return Response({'message': "Activation token successfully resend"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Only for admins
