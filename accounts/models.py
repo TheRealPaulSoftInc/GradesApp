@@ -3,10 +3,11 @@ from typing import Reversible
 
 from django.conf import settings
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import (AbstractBaseUser, Group,
+from django.contrib.auth.models import (AbstractBaseUser, Group, Permission,
                                         PermissionsMixin)
-from django.db.models.signals import post_save
 from django.db import models
+from django.db.models import Q
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -69,6 +70,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 def post_save(sender, instance, **kwargs):
     if instance.is_staff:
         group, _ = Group.objects.get_or_create(name='AdminUser')
+        for p in Permission.objects.all():
+            group.permissions.add(p)
+
     else:
         group, _ = Group.objects.get_or_create(name='User')
+        for p in Permission.objects.all():
+            print(p.content_type.__str__())
+            if 'accounts' in p.content_type.__str__() or 'grades' in p.content_type.__str__():
+                group.permissions.add(p)
+        print(group.permissions.all())
     instance.groups.add(group)

@@ -58,7 +58,8 @@ class CourseView(ListCreateAPIView):
     """
 
     serializer_class = CourseSerializer
-    permission_classes = [IsAuthenticated, IsCourseOwner, DjangoModelPermissions]
+    permission_classes = [IsAuthenticated,
+                          IsCourseOwner, DjangoModelPermissions]
     filter_backends = [DjangoFilterBackend,
                        filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = '__all__'
@@ -82,7 +83,8 @@ class CourseDetailView(RetrieveUpdateDestroyAPIView):
 
     http_method_names = ['get', 'put', 'delete']
     serializer_class = CourseSerializer
-    permission_classes = [IsAuthenticated, IsCourseOwner, DjangoModelPermissions]
+    permission_classes = [IsAuthenticated,
+                          IsCourseOwner, DjangoModelPermissions]
     lookup_field = 'id'
 
     def get_queryset(self):
@@ -96,7 +98,8 @@ class GradeView(ListCreateAPIView):
     """
 
     serializer_class = GradeSerializer
-    permission_classes = [IsAuthenticated, IsGradeOwner, DjangoModelPermissions]
+    permission_classes = [IsAuthenticated,
+                          IsGradeOwner, DjangoModelPermissions]
     filter_backends = [DjangoFilterBackend,
                        filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = '__all__'
@@ -120,7 +123,8 @@ class GradeDetailView(RetrieveUpdateDestroyAPIView):
 
     http_method_names = ['get', 'put', 'delete']
     serializer_class = GradeSerializer
-    permission_classes = [IsAuthenticated, IsGradeOwner, DjangoModelPermissions]
+    permission_classes = [IsAuthenticated,
+                          IsGradeOwner, DjangoModelPermissions]
     lookup_field = 'id'
 
     def get_queryset(self):
