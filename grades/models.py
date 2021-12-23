@@ -37,7 +37,12 @@ class Semester(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.id:
-            self.order = self.objects.all().aggregate(Max('order')) + 1
+            max_semester_order = Semester.objects.all().aggregate(
+                Max('order'))['order__max']
+            if max_semester_order:
+                self.order = max_semester_order + 1
+            else:
+                self.order = 1
         super(Semester, self).save(*args, **kwargs)
     # @property
     # def progress_grade(self):
