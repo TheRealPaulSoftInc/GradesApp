@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import Max
 from django.db.models.deletion import CASCADE
 
 User = get_user_model()
@@ -8,7 +9,7 @@ User = get_user_model()
 class Semester(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, default="")
-    term = models.PositiveSmallIntegerField(
+    order = models.PositiveSmallIntegerField(
         default=None, blank=True, null=True)
     progress_score = models.DecimalField(
         default=None, blank=True, null=True, decimal_places=4, max_digits=7)
@@ -33,6 +34,11 @@ class Semester(models.Model):
                 self.target_score += course.target_grade * \
                     (course.credit/self.total_credits)
         self.save()
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.order = self.objects.all().aggregate(Max('order')) + 1
+        super(Semester, self).save(*args, **kwargs)
     # @property
     # def progress_grade(self):
     #     '''
@@ -179,14 +185,10 @@ class Grade(models.Model):
     order = models.PositiveSmallIntegerField(default=0)
 
     def save(self, *args, **kwargs):
-        if not self.id:
-            super(Grade, self).save(*args, **kwargs)
-        else:
-            print(kwargs['score'])
-            if self.score != kwargs['score']:
-                # Test
-                self.course.calculate_all()
-            super(Grade, self).save(*args, **kwargs)
+        if self.score != kwargs['score'] or self.weight != kwargs['weight']:
+            # Test
+            self.course.calculate_all()
+        super(Grade, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
