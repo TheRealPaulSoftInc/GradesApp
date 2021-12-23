@@ -77,7 +77,7 @@ class Semester(models.Model):
     #     return False
 
     def __str__(self):
-        return f"Semester {self.term}"
+        return f"Semester {self.order}"
 
 
 class Course(models.Model):

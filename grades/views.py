@@ -26,7 +26,7 @@ class SemesterView(ListCreateAPIView):
     filterset_fields = '__all__'
     search_fields = '__all__'
     ordering_fields = '__all__'
-    ordering = ['term']
+    ordering = ['order']
 
     def perform_create(self, serializer):
         return serializer.save(user=self.request.user)

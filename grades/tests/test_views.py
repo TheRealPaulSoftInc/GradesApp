@@ -18,7 +18,7 @@ class TestSemester(APITestCase):
         self.url = reverse('grades:semesters')
         self.data = {
             "name": "CICLO 2021-2",
-            "term": 8,
+            "order": 8,
             "progress_score": 0.0,
             "target_score": 0.0,
             "total_credits": 0,
@@ -30,7 +30,7 @@ class TestSemester(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Semester.objects.count(), 1)
         self.assertEqual(Semester.objects.get().name, self.data['name'])
-        self.assertEqual(Semester.objects.get().term, self.data['term'])
+        self.assertEqual(Semester.objects.get().order, self.data['order'])
         self.assertEqual(Semester.objects.get().progress_score, self.data['progress_score'])
         self.assertEqual(Semester.objects.get().target_score, self.data['target_score'])
         self.assertEqual(Semester.objects.get().total_credits, self.data['total_credits'])
