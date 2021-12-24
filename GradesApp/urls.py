@@ -4,10 +4,22 @@ from django.urls import include, path
 from django.urls.conf import re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
+from drf_yasg.generators import OpenAPISchemaGenerator
 from rest_framework import permissions
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.documentation import include_docs_urls
+from GradesApp.settings import DEBUG
 from accounts.jwt import JWTAuthentication
+from django.conf.urls.static import static
+
+class HttpsSchemaGenerator(OpenAPISchemaGenerator):
+    def get_schema(self, request=None, public=False):
+        schema = super().get_schema(request, public)
+        if DEBUG:
+            schema.schemes = ["http", "https"]
+        else:
+            schema.schemes = ["https"]
+        return schema
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -19,8 +31,9 @@ schema_view = get_schema_view(
         license=openapi.License(name="BSD License"),
     ),
     public=True,
+    generator_class=HttpsSchemaGenerator,
     permission_classes=[permissions.AllowAny],
-    authentication_classes=[]
+    authentication_classes=[],
 )
 
 urlpatterns = [

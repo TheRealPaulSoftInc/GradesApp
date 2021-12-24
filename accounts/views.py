@@ -82,12 +82,15 @@ class ActivationView(APIView):
         """
         Activate an account via a token
         """
-        user = jwt_account_activation.check_token(token)
-        if user:
-            user.is_active = True
-            user.save()
-            return Response({'message': "User account successfully activated"}, status=status.HTTP_201_CREATED)
-        return Response({'message': "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+        user = None
+        try:
+            user = jwt_account_activation.check_token(token)
+            if user:
+                user.is_active = True
+                user.save()
+                return Response({'message': "User account succesfully activated"}, status=status.HTTP_201_CREATED)
+        except Exception as ex:
+            return Response({'message': str(ex)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ResendActivationTokenView(GenericAPIView):

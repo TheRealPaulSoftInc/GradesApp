@@ -68,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'GradesApp.urls'
@@ -95,37 +96,20 @@ WSGI_APPLICATION = 'GradesApp.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'cloud': {
-        'ENGINE': 'mssql',
-        'NAME': os.environ.get('DB_CLOUD_NAME'),
-        'USER': os.environ.get('DB_CLOUD_USER'),
-        'PASSWORD': os.environ.get('DB_CLOUD_PASSWORD'),
-        'HOST': os.environ.get('DB_CLOUD_HOST'),
-        'PORT': os.environ.get('DB_CLOUD_PORT'),
-        "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", },
-    },
     'test': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'gradesappdbtest.sqlite'
     },
-    'local': {
-        'ENGINE': 'mssql',
-        'NAME': os.environ.get('DB_LOCAL_NAME'),
-        'USER': os.environ.get('DB_LOCAL_USER'),
-        'PASSWORD': os.environ.get('DB_LOCAL_PASSWORD'),
-        'HOST': os.environ.get('DB_LOCAL_HOST'),
-        'PORT': os.environ.get('DB_LOCAL_PORT'),
-        "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", }
-    },
 }
-
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 if 'test' in sys.argv:
     DATABASES['default'] = DATABASES['test']
-elif not DEBUG:
-    DATABASES['default'] = DATABASES['cloud']
+    EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend'
 else:
-    DATABASES['default'] = DATABASES['local']
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+    if DATABASES['default']['ENGINE']=='sql_server.pyodbc':
+        DATABASES['default']['OPTIONS'] = {"driver":"ODBC Driver 17 for SQL Server"}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -163,7 +147,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATICFILE_DIRS = [
+    "static/images",
+    "static/css",
+    "staticfiles", ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -180,7 +168,8 @@ EMAIL_HOST_USER = os.environ.get('PAULSOFT_EMAIL_USER')
 DEFAULT_FROM_EMAIL = os.environ.get('PAULSOFT_EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('PAULSOFT_EMAIL_PASSWORD')
 EMAIL_VERIFICATION_URL = os.environ.get('EMAIL_VERIFICATION_URL')
-
+if DEBUG or ('test' in sys.argv):
+    EMAIL_VERIFICATION_URL = 'http://localhost:3000/activate/'
 # Django Rest Framework settings
 # https://www.django-rest-framework.org/api-guide/settings/
 
@@ -212,3 +201,4 @@ SWAGGER_SETTINGS = {
 # https://github.com/adamchainz/django-cors-headers
 
 CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS').split(" ")
+CORS_ALLOW_ALL_ORIGINS = DEBUG
