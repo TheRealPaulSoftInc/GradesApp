@@ -13,19 +13,6 @@ Also, this demo has a frontend integration. Check it out!
 
 - https://gradesapp-web.herokuapp.com/
 
-In order to use the swagger docs, you must follow this steps:
-
-- Register on [(POST) /accounts/register/] with a real email.
-- Go to the link that was send to your email and it will activate the account.
-- Login on [(POST) /accounts/login/] with your credentials
-- The previous step will provide a token. Copy the token and authorize your access into swagger by clicking the "Authorize" green button on the upper right section of the interface and insert the token with this format:
-
-```bash
-Bearer (Token)
-```
-
-- You are now authenticated on the swagger interface and you have the authorization of using most of the api endpoints. Some are reserved for staff only.
-
 ### Features
 
 This demo provides all this features:
@@ -40,6 +27,23 @@ This demo provides all this features:
 - CI/CD with docker and github actions
 - Mssql database integration
 - Filtering, Ordering, Searching and Paging on requests
+
+### API Documentation
+
+In order to use the swagger docs, you must follow this steps:
+
+- Go to the API Documentation provided with swagger: https://gradesappapi.herokuapp.com/swagger/
+- Register on [(POST) /accounts/register/] with a real email.
+- Go to the link that was send to your email and it will activate the account.
+- Login on [(POST) /accounts/login/] with your credentials
+- The previous step will provide a token. Copy the token and authorize your access into swagger by clicking the "Authorize" green button on the upper right section of the interface and insert the token with this format:
+
+```bash
+Bearer (Token)
+```
+
+- You are now authenticated on the swagger interface and you have the authorization of using most of the api endpoints. Some are reserved for staff only.
+
 
 ## Install dependencies
 
