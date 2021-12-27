@@ -36,7 +36,7 @@ class Semester(models.Model):
         self.save()
 
     def save(self, *args, **kwargs):
-        if not self.id:
+        if not self.id and not self.order:
             max_semester_order = Semester.objects.all().aggregate(
                 Max('order'))['order__max']
             if max_semester_order:

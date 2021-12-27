@@ -104,12 +104,13 @@ DATABASES = {
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 if 'test' in sys.argv:
     DATABASES['default'] = DATABASES['test']
-    EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend'
+    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
 else:
     import dj_database_url
     DATABASES['default'] = dj_database_url.config(conn_max_age=600)
-    if DATABASES['default']['ENGINE']=='sql_server.pyodbc':
-        DATABASES['default']['OPTIONS'] = {"driver":"ODBC Driver 17 for SQL Server"}
+    if DATABASES['default']['ENGINE'] == 'sql_server.pyodbc':
+        DATABASES['default']['OPTIONS'] = {
+            "driver": "ODBC Driver 17 for SQL Server"}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -178,8 +179,7 @@ REST_FRAMEWORK = {
         'accounts.jwt.JWTAuthentication',
     ],
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
 }
 
 # Django Swagger (drf-yasg) settings
