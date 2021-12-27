@@ -101,7 +101,8 @@ class Course(models.Model):
         default=None, blank=True, null=True, decimal_places=4, max_digits=7)
     is_completed = models.BooleanField(default=False)
     # order in which this element will be displayed
-    order = models.PositiveSmallIntegerField(default=0)
+    order = models.PositiveSmallIntegerField(
+        default=None, blank=True, null=True)
 
     def calculate_all(self):
         self.is_completed = True
@@ -119,6 +120,16 @@ class Course(models.Model):
                 self.target_score += grade.grade * grade.weight
         self.semester.calculate_all()
         self.save()
+
+    def save(self, *args, **kwargs):
+        if not self.id and not self.order:
+            max_course_order = Course.objects.filter(semester=self.semester).aggregate(
+                Max('order'))['order__max']
+            if max_course_order:
+                self.order = max_course_order + 1
+            else:
+                self.order = 1
+        super(Course, self).save(*args, **kwargs)
     # def save(self,*args, **kwargs):
     #     if not self.id:
     #         self.super.save()
@@ -187,12 +198,20 @@ class Grade(models.Model):
     # defines if the grade has been officially asigned
     is_confirmed = models.BooleanField(default=False)
     # order in which this element will be displayed
-    order = models.PositiveSmallIntegerField(default=0)
+    order = models.PositiveSmallIntegerField(
+        default=None, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.score != kwargs['score'] or self.weight != kwargs['weight']:
             # Test
             self.course.calculate_all()
+        if not self.id and not self.order:
+            max_grade_order = Grade.objects.filter(course=self.course).aggregate(
+                Max('order'))['order__max']
+            if max_grade_order:
+                self.order = max_grade_order + 1
+            else:
+                self.order = 1
         super(Grade, self).save(*args, **kwargs)
 
     def __str__(self):
