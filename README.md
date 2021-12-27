@@ -9,6 +9,10 @@ This demo is deployed on heroku but its api is not available for its integration
 - API: https://gradesappapi.herokuapp.com/api/
 - Swagger docs: https://gradesappapi.herokuapp.com/swagger/
 
+Also, this demo has a frontend integration. Check it out! 
+
+- https://gradesapp-web.herokuapp.com/
+
 In order to use the swagger docs, you must follow this steps:
 
 - Register on [(POST) /accounts/register/] with a real email.
