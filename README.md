@@ -4,7 +4,7 @@
 
 This is a demo api that provides the functionality of registering academic grades and some calculations.
 This solution pretends to solve a problem: ignorance of academic status.
-This demo is deployed on heroku but its api is not available for its integration with a client application because of its CORS settings:
+This demo is deployed on heroku but its api is not available for its integration with any client application because of its CORS settings:
 
 - API: https://gradesappapi.herokuapp.com/api/
 - Swagger docs: https://gradesappapi.herokuapp.com/swagger/
