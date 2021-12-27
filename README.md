@@ -24,7 +24,7 @@ In order to use the swagger docs, you must follow this steps:
 Bearer (Token)
 ```
 
-- Then you are authenticated on the swagger interface and you have the authorization of using most of the api endpoints. Some are reserved for staff only.
+- You are now authenticated on the swagger interface and you have the authorization of using most of the api endpoints. Some are reserved for staff only.
 
 ### Features
 
