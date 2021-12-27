@@ -1,5 +1,42 @@
 # GradesApp
 
+## About this project
+
+This is a demo api that provides the functionality of registering academic grades and some calculations.
+This solution pretends to solve a problem: ignorance of academic status.
+This demo is deployed on heroku but its api is not available for its integration with a client application because of its CORS settings:
+
+- API: https://gradesappapi.herokuapp.com/api/
+- Swagger docs: https://gradesappapi.herokuapp.com/swagger/
+
+In order to use the swagger docs, you must follow this steps:
+
+- Register on [(POST) /accounts/register/] with a real email.
+- Go to the link that was send to your email and it will activate the account.
+- Login on [(POST) /accounts/login/] with your credentials
+- The previous step will provide a token. Copy the token and authorize your access into swagger by clicking the "Authorize" green button on the upper right section of the interface and insert the token with this format:
+
+```bash
+Bearer (Token)
+```
+
+- Then you are authenticated on the swagger interface and you have the authorization of using most of the api endpoints. Some are reserved for staff only.
+
+### Features
+
+This demo provides all this features:
+
+- Custom user model
+- Custom user authentication (JWT Tokens)
+- Custom user authorization (Django Permissions and Custom Django Rest Permissions classes)
+- Custom email verification
+- Custom authentication backend
+- Documentation with OpenAPI (with swagger drf-yasg)
+- Unit testings (with Coverage.py)
+- CI/CD with docker and github actions
+- Mssql database integration
+- Filtering, Ordering, Searching and Paging on requests
+
 ## Install dependencies
 
 ```bash
