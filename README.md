@@ -6,6 +6,12 @@
 pip install -r ./requirements.txt
 ```
 
+## Run tests coverage
+
+```bash
+coverage run manage.py test && coverage report && coverage html
+```
+
 ## Configure .env file
 
 In order to run locally, you must create a .env file on the root folder and set these configurations:
