@@ -11,7 +11,8 @@ This demo is deployed on heroku but its api is not available for its integration
 
 Also, this demo has a frontend integration. Check it out! 
 
-- https://gradesapp-web.herokuapp.com/
+- Deployed demo: https://gradesapp-web.herokuapp.com/
+- Repository: https://github.com/TheRealPaulSoftInc/GradesAppFrontend/
 
 ### Features
 
