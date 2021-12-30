@@ -51,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         token = jwt.encode(
             {
                 'email': self.email,
-                'exp': datetime.utcnow()+timedelta(hours=24)
+                'exp': datetime.utcnow()+timedelta(hours=5)
             },
             settings.SECRET_KEY, algorithm='HS256'
         )
@@ -76,8 +76,8 @@ def post_save(sender, instance, **kwargs):
     else:
         group, _ = Group.objects.get_or_create(name='User')
         for p in Permission.objects.all():
-            #print(p.content_type.__str__())
+            # print(p.content_type.__str__())
             if 'accounts' in p.content_type.__str__() or 'grades' in p.content_type.__str__():
                 group.permissions.add(p)
-        #print(group.permissions.all())
+        # print(group.permissions.all())
     instance.groups.add(group)

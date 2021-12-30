@@ -202,8 +202,9 @@ class Grade(models.Model):
         default=None, blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        if self.score != kwargs['score'] or self.weight != kwargs['weight']:
-            # Test
+        if not self.id:
+            pass
+        elif (kwargs.get('score') and self.score != kwargs['score']) or (kwargs.get('weight') and self.weight != kwargs['weight']):
             self.course.calculate_all()
         if not self.id and not self.order:
             max_grade_order = Grade.objects.filter(course=self.course).aggregate(
